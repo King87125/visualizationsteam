@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏详情页面</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: linear-gradient(to bottom, #f7f8fa, #e2e6ed);
+            color: #333;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #6A5ACD;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .back-button:hover {
+            background-color: #5a4cb8;
+            transform: translateY(-2px);
+        }
+
+        /* 页面整体容器 */
+        .container {
+            width: 90vw;
+            height: 85vh;
+            display: flex;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 50px;
+        }
+
+        /* 左侧基本信息 */
+        .left-section {
+            flex: 1;
+            background: #6A5ACD;
+            color: white;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .left-section h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .left-section p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .left-section a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .left-section a:hover {
+            color: #FFB600;
+        }
+
+        /* 右侧详细信息 */
+        .right-section {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #6A5ACD;
+            border-bottom: 2px solid #6A5ACD;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+        }
+
+        .tags, .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tags span, .features span {
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .requirements {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 返回按钮 -->
+    <a href="index.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> 返回主页
+    </a>
+
+    <!-- 页面内容 -->
+    <div class="container">
+        <!-- 左侧基本信息 -->
+        <div class="left-section" id="leftSection">
+            <h1 id="gameTitle">游戏标题</h1>
+            <p id="gamePrice"><strong>原价:</strong></p>
+            <p id="gameDiscount"><strong>折扣价:</strong></p>
+            <p id="gameRelease"><strong>发布日期:</strong></p>
+            <p id="gameDeveloper"><strong>开发商:</strong></p>
+            <p id="gamePublisher"><strong>发行商:</strong></p>
+            <a id="gameLink" href="#" target="_blank">
+                <i class="fas fa-external-link-alt"></i> 前往 Steam 页面
+            </a>
+        </div>
+
+        <!-- 右侧详细信息 -->
+        <div class="right-section">
+            <div>
+                <h2 class="section-title">游戏描述</h2>
+                <p id="gameDescription"></p>
+            </div>
+
+            <div>
+                <h2 class="section-title">流行标签</h2>
+                <div class="tags" id="gameTags"></div>
+            </div>
+
+            <div>
+                <h2 class="section-title">游戏功能</h2>
+                <div class="features" id="gameFeatures"></div>
+            </div>
+
+            <div>
+                <h2 class="section-title">最低配置</h2>
+                <div class="requirements" id="gameRequirements"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const gameTitleParam = params.get("title");
+        if (gameTitleParam) {
+            fetch('updated_games_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    const game = data.find(g => g.Title === gameTitleParam);
+
+                    if (game) {
+                        document.getElementById("gameTitle").innerText = game.Title;
+                        document.getElementById("gamePrice").innerText = `原价: ${game["Original Price"]}`;
+                        document.getElementById("gameDiscount").innerText = `折扣价: ${game["Discounted Price"]}`;
+                        document.getElementById("gameRelease").innerText = `发布日期: ${game["Release Date"]}`;
+                        document.getElementById("gameDeveloper").innerText = `开发商: ${game.Developer}`;
+                        document.getElementById("gamePublisher").innerText = `发行商: ${game.Publisher}`;
+                        document.getElementById("gameLink").href = game.Link;
+
+                        document.getElementById("gameDescription").innerText = game["Game Description"];
+
+                        const tagsContainer = document.getElementById("gameTags");
+                        game["Popular Tags"].forEach(tag => {
+                            const tagElement = document.createElement("span");
+                            tagElement.innerText = tag;
+                            tagsContainer.appendChild(tagElement);
+                        });
+
+                        const featuresContainer = document.getElementById("gameFeatures");
+                        game["Game Features"].split(", ").forEach(feature => {
+                            const featureElement = document.createElement("span");
+                            featureElement.innerText = feature;
+                            featuresContainer.appendChild(featureElement);
+                        });
+
+                        document.getElementById("gameRequirements").innerText = game["Minimum Requirements"];
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

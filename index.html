@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam游戏数据可视化</title>
+    <!-- ECharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 外部CSS文件 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>Steam数据可视化</header>
+    <div class="main-container">
+        <!-- 左侧：气泡图区域(小一些) + 散点图(放在下面，加大显示区域) -->
+        <div class="left-panel">
+            <div class="bubble-container-wrapper">
+                <div id="bubbleContainer" class="chart-container"></div>
+            </div>
+            <div class="scatter-container-wrapper">
+                <div id="scatterChart" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- 右侧：搜索、标签与两个图表 (线图、柱状图) -->
+        <div class="right-panel">
+            <div class="rightTop">   
+                <div class="top-left">
+                    <!-- 搜索框区域：新增标签与游戏搜索切换 -->
+                    <div class="search-section">
+                        <!-- 搜索模式切换按钮 -->
+                        <div class="search-toggle">
+                            <button id="tagSearchBtn" class="active" onclick="setSearchMode('tag')">标签搜索</button>
+                            <button id="gameSearchBtn" onclick="setSearchMode('game')">游戏搜索</button>
+                        </div>
+                        <!-- 搜索输入框 -->
+                        <div class="tag-search">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="输入标签名称进行搜索" />
+                            <button onclick="executeSearch()">
+                                <i class="fas fa-search"></i> 搜索
+                            </button>
+                        </div>
+                    </div>
+                    <div id="selectedTagsContainer">
+                        <h3>已选标签：</h3>
+                        <div id="selectedTagsList"></div>
+                    </div>
+                    <div id="gameResults">请选择标签查看游戏列表</div>
+                </div>
+                <div class="top-right">
+                    <div id="ttChart" class="ranking-container">
+                        <h2>游戏热度排行榜</h2>
+                        <div class="ranking-list" id="rankingList">
+                            <!-- 动态生成的游戏项将插入这里 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 下半部分：线图与柱状图并列 -->
+            <div class="charts-section">
+                <div id="lineChart" class="chart-container"></div>
+                <div id="barChart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 外部JS文件 -->
+    <script src="script.js"></script>
+</body>
+</html>

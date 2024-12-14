@@ -1,0 +1,569 @@
+/* 全局样式 */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: url('background-image.jpg') no-repeat center center fixed; /* 替换为您的背景图片路径 */
+    background-size: cover;
+    overflow: hidden; /* 禁止滚动 */
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(247, 248, 250, 0.8); /* 半透明覆盖，确保内容可读性 */
+    z-index: -1;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    color: white;
+    background: linear-gradient(135deg, #6A5ACD, #FF6347);
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    letter-spacing: 1px;
+}
+
+.main-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    margin-top: 60px; /* 留出header高度 */
+    box-sizing: border-box;
+}
+
+/* 左侧的布局: 上面是气泡图(缩小), 下面是散点图(加大) */
+.left-panel {
+    width: 45%;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+    gap: 10px;
+}
+
+.bubble-container-wrapper {
+    flex: 0.4; /* 气泡图高度缩小为整个左侧的40% */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#bubbleContainer {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95); /* 增加背景透明度 */
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+#bubbleContainer:hover {
+    transform: translateY(-5px);
+}
+
+.scatter-container-wrapper {
+    flex: 0.6; /* 散点图占左侧60%高度,比原来更大更高 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scatter-container-wrapper .chart-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* 右侧: 调整顶部与图表区域比例，使两个图表更大 */
+.right-panel {
+    width: 55%;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+/* 上半部分再缩小一点 */
+.rightTop {
+    flex: 0.5; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* 更好地分配左右空间 */
+    overflow: hidden;
+    align-items: flex-start; /* 与内容顶部对齐 */
+    gap: 20px; /* 增加间距 */
+}
+
+/* 搜索和选中标签部分 */
+.top-left {
+    width: 48%; /* 调整宽度以适应间距 */
+    padding: 20px;
+    box-sizing: border-box; /* 包括内边距 */
+}
+
+.top-right {
+    width: 45%; /* 调整宽度以适应间距 */
+    padding: 20px;
+    border-radius: 15px; /* 增加圆角，与 ranking-container 一致 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 内容水平居中 */
+    text-align: center; /* 文本居中 */
+    background-color: rgba(255, 255, 255, 0.95); /* 白色背景，透明度95% */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 动态效果 */
+    transform: translateX(-20px);
+}
+
+.top-right:hover {
+    transform: scale(1.02); /* 鼠标悬停时轻微放大 */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3); /* 增强阴影效果 */
+}
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+/* 搜索框整体样式 */
+.tag-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: linear-gradient(to right, #f0f0f0, #ffffff);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.tag-search:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to right, #ffffff, #f9f9f9);
+}
+
+/* 输入框样式 */
+#searchInput {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+}
+
+#searchInput:focus {
+    border-color: #6A5ACD;
+    box-shadow: 0 0 10px rgba(106, 90, 205, 0.4);
+}
+
+/* 搜索按钮样式 */
+.tag-search button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: linear-gradient(to right, #6A5ACD, #5a4cb8);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.tag-search button:hover {
+    background: linear-gradient(to right, #5a4cb8, #4a3ca8);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.tag-search button i {
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+/* 搜索模式切换按钮 */
+.search-toggle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.search-toggle button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background-color: #ddd;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.search-toggle button.active {
+    background-color: #6A5ACD;
+    color: #fff;
+}
+
+.search-toggle button:hover {
+    background-color: #5a4cb8;
+    color: #fff;
+}
+
+#selectedTagsContainer {
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+#selectedTagsContainer h3 {
+    font-size: 14px;
+    margin: 10px 0 5px 0;
+    letter-spacing: 0.5px;
+    color: #333;
+}
+
+#selectedTagsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+#gameResults {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    width: 100%; /* 改为100%以适应父容器 */
+    height: 150px; /* 调整高度以适应布局 */
+    box-sizing: border-box; /* 保证 padding 不会影响到宽度和高度 */
+}
+
+/* 下半部分: 两个图表, 给更多空间 */
+.charts-section {
+    flex: 0.5; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.chart-container {
+    width: 48%; /* 两个图表并列, 稍微更宽一些, 减少间隙, 显示更清晰 */
+    height: 100%; 
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.chart-container:hover {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+}
+
+/* 已选标签样式 */
+#selectedTagsList > div {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    background-image: linear-gradient(135deg, #FF6347, #FF7B5B);
+    color: white;
+    border-radius: 15px;
+    font-size: 12px;
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+#selectedTagsList > div:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
+
+#selectedTagsList button {
+    margin-left: 8px;
+    background-color: white;
+    color: #FF6347;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 2px 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#selectedTagsList button:hover {
+    background-color: #eee;
+    transform: scale(1.1);
+}
+
+/* tooltip 美化 */
+.echarts-tooltip {
+    transition: all 0.3s ease;
+    border-radius: 8px !important;
+    background-color: rgba(255,255,255,0.95) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}
+
+.ranking-container {
+    width: 100%; /* 让容器占据父容器的全部宽度 */
+    max-height: 400px; /* 固定最大高度 */
+    background-color: rgba(255, 255, 255, 0.95); /* 半透明白色背景 */
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 添加阴影效果 */
+    padding: 20px;
+    box-sizing: border-box; /* 确保内边距包含在总宽度内 */
+    overflow: hidden; /* 隐藏溢出内容 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 动态效果 */
+}
+
+.ranking-container:hover {
+    transform: scale(1.02); /* 鼠标悬停时轻微放大 */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3); /* 增强阴影效果 */
+}
+
+.ranking-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5rem; /* 增加标题字体大小 */
+}
+
+.ranking-list {
+    position: relative;
+    max-height: 340px; /* 调整显示区域高度，留出标题空间 */
+    /* overflow-y: auto; 允许垂直滚动 */
+    padding-right: 5px; /* 避免内容被遮挡 */
+    transition: transform 0.5s ease-in-out;
+    overflow: hidden;
+}
+
+.ranking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px; /* 调整内边距 */
+    border-bottom: 1px solid #eee;
+    background-color: #fafafa;
+    transition: background-color 0.3s, transform 0.3s;
+    cursor: pointer; /* 指示可点击 */
+    height: 50px; /* 固定高度，确保滚动效果 */
+    box-sizing: border-box;
+}
+
+.ranking-item:nth-child(even) {
+    background-color: #f0f0f0;
+}
+
+.ranking-item:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px); /* 鼠标悬停时稍微上移 */
+}
+
+.game-name {
+    font-weight: bold;
+    color: #333;
+    flex: 2;
+    text-align: left;
+    white-space: nowrap; /* 强制在一行内显示 */
+    overflow: hidden; /* 隐藏溢出内容 */
+    text-overflow: ellipsis; /* 使用省略号截断 */
+}
+
+.game-name:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+    margin-top: 2px;
+    font-size: 12px;
+}
+
+.game-rank {
+    color: #555;
+    width: 50px;
+    text-align: center;
+}
+
+.discount-price {
+    color: #e74c3c;
+    width: 80px;
+    text-align: right;
+}
+
+/* Scrollbar Styling for Ranking List */
+.ranking-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ranking-list::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.ranking-list::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 4px;
+}
+
+.ranking-list::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}
+
+/* 按钮基本样式 */
+.button {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50; /* 明亮的绿色 */
+    border: none;
+    border-radius: 8px;  /* 圆角效果 */
+    cursor: pointer;
+    transition: all 0.3s ease;  /* 平滑的过渡效果 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* 添加轻微的阴影 */
+}
+
+.button:hover {
+    background-color: #45a049; /* 悬停时变深的绿色 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 悬停时阴影加深 */
+}
+
+.button:active {
+    transform: translateY(2px); /* 点击时产生按压效果 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 点击时阴影减轻 */
+}
+
+.button:focus {
+    outline: none;  /* 去掉默认的焦点框 */
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5); /* 给焦点状态添加绿色外框 */
+}
+
+/* 响应式布局 */
+@media (max-width: 1200px) {
+    .left-panel {
+        width: 50%;
+        padding: 10px;
+    }
+
+    .right-panel {
+        width: 50%;
+        padding: 10px 15px;
+    }
+
+    .charts-section {
+        flex-direction: column;
+    }
+
+    .chart-container {
+        width: 100%;
+        height: 45%; 
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .left-panel, .right-panel {
+        width: 100%;
+        height: 50vh;
+    }
+
+    .rightTop {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .top-left, .top-right {
+        width: 100%;
+    }
+
+    .charts-section {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .chart-container {
+        width: 100%;
+        height: 45%; 
+    }
+
+    .button {
+        font-size: 14px;  /* 小屏幕时按钮字体缩小 */
+        padding: 10px 20px;  /* 调整按钮的内边距 */
+    }
+}
+
+/* 按钮容器对齐和布局 */
+#controls {
+    display: flex;
+    justify-content: center; /* 使按钮居中 */
+    margin-top: 20px;
+}
+
+/* 优化整体面板布局 */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+}
+
+.bubble-container-wrapper,
+.scatter-container-wrapper {
+    width: 100%;
+    max-width: none; /* 移除最大宽度限制 */
+    margin-bottom: 20px;
+}
